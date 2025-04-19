@@ -18,7 +18,6 @@
             flex-direction: column;
             border-radius: 10px;
             color:rgb(0, 0, 0);
-            
         }
         .btn {
             align-self: center;
@@ -175,7 +174,7 @@
                 <!-- Age -->
                 <p>
                 <p style="font-size: x-large; margin-bottom: 5px; font-weight: 400;">&nbsp;Age<br></p>
-                    <input class="inp" placeholder="Enter yout age" type="number" name="age" id="age" required min="16">
+                    <input class="inp" placeholder="Enter your age" type="number" name="age" id="age" required min="16">
                 </p> <br><br>
                 <button class="btn" type="submit">Buy Ticket</button>
             </form>

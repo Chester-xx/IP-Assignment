@@ -60,20 +60,21 @@
             header(header: "Location: index.php?error=Please+enter+your+age");
             exit;
         }
-        // decl vars
-        $username = (string)$_POST["username"];
-        $age = (int)$_POST["age"];
-        $gender = (string)$_POST["gender"];
-        $tickettype = (string)$_POST["type"];
+        // decl vars and filter/sanitize
+        $username = filter_input(type: INPUT_POST, var_name: 'username', filter: FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $age = filter_input(type: INPUT_POST, var_name: 'age', filter: FILTER_VALIDATE_INT);
+        $gender = filter_input(type: INPUT_POST, var_name: 'gender', filter: FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $tickettype = filter_input(type: INPUT_POST, var_name: 'type', filter: FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
         $file = json_decode(json: file_get_contents(filename: "server.json"), associative: true);
         // Are there enough tickets available to be sold
         if ($file["tickets"]["left"] < 1) {
             header(header: "Location: index.php?error=Not+enough+tickets+left+for+sale");
             exit;
         }
-        // Is the user of age
-        if ($age < 16 || $age > 100) {
-            header(header: "Location: index.php?error=Attendees+must+be+over+16");
+        // Is the user of age | filter_int returns false if not a valid integer
+        if ($age < 16 || $age > 100 || $age === false) {
+            header(header: "Location: index.php?error=Please+enter+a+valid+age+that+is+atleast+16");
             exit;
         }
         // Dec tickets left for sale and inc gender total counter
