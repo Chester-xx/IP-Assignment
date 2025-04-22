@@ -101,7 +101,7 @@
             // did user click on continue
             if (isset($_POST["continue"])) {
                 // is student count set or null
-                if (!isset($_POST["studentcount"]) || $_POST["studentcount"] == "" || !is_int(value: $_POST["studentcount"])) {
+                if (!isset($_POST["studentcount"]) || $_POST["studentcount"] == "") {
                     // set error
                     $error = "Error: Please enter a valid number for the amount of students you will be using";
                     exit;
