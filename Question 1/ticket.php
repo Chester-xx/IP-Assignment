@@ -74,7 +74,7 @@
         }
         // Is the user of age | filter_int returns false if not a valid integer
         if ($age < 16 || $age > 100 || $age === false) {
-            header(header: "Location: index.php?error=Please+enter+a+valid+age+that+is+atleast+16");
+            header(header: "Location: index.php?error=Under+age,+Attendees+must+be+16+or+older");
             exit;
         }
         // Dec tickets left for sale and inc gender total counter

@@ -1,3 +1,65 @@
+<?php
+    // start session to store arrays and student count
+    session_start();
+    if (isset($_POST["closelisteners"])) {
+        // destroy session if user clicked on close
+        session_destroy();
+    }
+?>
+<?php
+    // did user click on continue
+    if (isset($_POST["continue"])) {
+       // is student count set or null
+       if (!isset($_POST["studentcount"]) || $_POST["studentcount"] == "" || !is_numeric(value: $_POST["studentcount"])) {
+           // set error
+           header(header: "Location: index.php?error=Please+enter+a+valid+number+for+the+amount+of+students+you+will+be+using");
+           exit;
+       }
+       // set student count to be accessed after get resets post vars
+       $_SESSION["studentcount"] = $_POST["studentcount"];
+       // redirect to mark entering page
+       header(header: "Location: index.php?marks=true");
+       exit;
+    }
+?>
+<?php
+    // did the user click on submit
+    if (isset($_POST["submit"])) {
+        // are named inputs set and not null
+        if (!isset($_POST["names"]) || !isset($_POST["marks"])) {
+            // redirect error
+            header(header: "Location: index.php?error=Please+ensure+you+have+entered+all+student+names+and+marks");
+            exit;
+        }
+        // set arrays in session
+        $_SESSION["names"] = $_POST["names"];
+        $_SESSION["marks"] = $_POST["marks"];
+
+        // null and invalid value checks
+        for ($i = 0; $i < count(value: $_SESSION["names"]); $i++) {
+            // are there any empty names
+            if ($_SESSION["names"][$i] == "") {
+                header(header: "Location: index.php?error=Please+ensure+you+have+entered+all+student+names");
+                exit;
+            }
+            for ($j = 0; $j <= 4; $j++) {
+                // are any marks invalid, less than 0 or greater than 100
+                if ($_SESSION["marks"][$i][$j] < 0 || $_SESSION["marks"][$i][$j] > 100) {
+                    header(header: "Location: index.php?error=Please+ensure+you+have+entered+valid+student+marks+between+0+and+100");
+                    exit;
+                }
+                // are there any empty marks
+                if ($_SESSION["marks"][$i][$j] == "") {
+                    header(header: "Location: index.php?error=Please+ensure+you+have+entered+all+required+marks");
+                    exit;
+                }
+            }
+        }
+        // redirect to calculated info page
+        header(header: "Location: index.php?form=true");
+        exit;
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +74,6 @@
         .cont {
             display: flex;
             justify-content: center;
-            /* MIGHT HAVE TO CHANGE !!!! */
             padding-left: 10%;
             padding-right: 10%;
         }
@@ -80,16 +141,15 @@
         <?php
             // tracker
             $singlestudent = false;
-            // error
-            $error = null;
             // only show below on get
-            if ($_SERVER["REQUEST_METHOD"] == "GET") { ?>
+            // did the user come from a fresh start/not from other pages/from closing the form page
+            if ($_SERVER["REQUEST_METHOD"] == "GET" && !isset($_GET["marks"]) && !isset($_GET["form"])) { ?>
                 <div class="box">
                     <form method="POST">
                         <h1>Students</h1>
                         <hr>
                         <h2>Number of Students</h2><br><br>
-                        <input type="number" name="studentcount" placeholder="Enter number of students" min="1" required>
+                        <input type="text" name="studentcount" placeholder="Enter number of students" min="1" required>
                         <button type="submit" name="continue">Continue</button>
                     </form>
                 </div>
@@ -98,16 +158,9 @@
         ?>
         <!-- Continue Logic -->
         <?php
-            // did user click on continue
-            if (isset($_POST["continue"])) {
-                // is student count set or null
-                if (!isset($_POST["studentcount"]) || $_POST["studentcount"] == "") {
-                    // set error
-                    $error = "Error: Please enter a valid number for the amount of students you will be using";
-                    exit;
-                }
+            if (isset($_GET["marks"])) {
                 // get student count from user input
-                $studentcount = intval(value: $_POST["studentcount"]);
+                $studentcount = intval(value: $_SESSION["studentcount"]);
                 ?>
                 <div class="box">
                     <form method="POST">
@@ -140,43 +193,18 @@
         ?>
         <!-- Submit Logic -->
         <?php
-            if (isset($_POST["submit"])) {
-                // are named inputs set and not null
-                if (!isset($_POST["names"]) || !isset($_POST["marks"])) {
-                    $error = "Error : Please ensure you have entered all student names and marks";
-                    exit;
-                }
+            if (isset($_GET["form"])) {
                 // decl vars
-                $names = $_POST["names"];
-                $marks = $_POST["marks"];
+                $names = $_SESSION["names"];
+                $marks = $_SESSION["marks"];
                 $averages = [];
                 $grades = [];
-                // ref
+                // ref associative array
                 $gradecategories = ["A" => 0, "B" => 0, "C" => 0, "D" => 0, "F" => 0];
                 // decl vars before entering for loop for mass calc
                 $top_name = "";
                 $top_avg = 0.0;
                 $classavg = 0.0;
-                // null and invalid value checks
-                for ($i = 0; $i < count(value: $names); $i++) {
-                    // are there any empty names
-                    if ($names[$i] == "") {
-                        $error = "Error : Please ensure you have entered all student names";
-                        exit;
-                    }
-                    for ($j = 0; $j <= 4; $j++) {
-                        // are any marks invalid, less than 0 or greater than 100
-                        if ($marks[$i][$j] < 0 || $marks[$i][$j] > 100) {
-                            $error = "Error : Please ensure you have entered valid student marks between 0 and 100";
-                            exit;
-                        }
-                        // are there any empty marks
-                        if ($marks[$i][$j] == "") {
-                            $error = "Error : Please ensure you have entered all required marks";
-                            exit;
-                        }
-                    }
-                }
                 // mass calculations
                 for ($i = 0; $i < count(value: $names); $i++) {
                     // decl vars
@@ -225,7 +253,7 @@
                             ?>
                         </div>
                         <!-- returns user back to start -->
-                        <button type="submit">Close</button>
+                        <button type="submit" name="closelisteners">Close</button>
                     </form>
                 </div>
                 <?php
@@ -246,13 +274,19 @@
                             F : <?php echo $gradecategories["F"] ?><br>
                         </p>
                     </div>
-                    <?php // show message to inform user
+                    <?php // show message to inform user that there will be no class statistics
                 } else $singlestudent = true;
             }
         ?>
     </div>
     <!-- error handling and message -->
     <?php if ($singlestudent) echo "<p class='err'>Note : Class Statistics not available as only one student was listed</p>"; ?>
-    <?php if ($error) echo "<p class='err'>" . ($error) . "</p>"?>
+    <?php
+        // is there an error
+        if (isset($_GET["error"])) {
+            // display
+            echo "<p class='err'>" . htmlspecialchars(string: $_GET["error"]) . "</p>";
+        }
+    ?>
 </body>
 </html>

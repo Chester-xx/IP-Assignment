@@ -174,9 +174,15 @@
                 <!-- Age -->
                 <p>
                 <p style="font-size: x-large; margin-bottom: 5px; font-weight: 400;">&nbsp;Age<br></p>
-                    <input class="inp" placeholder="Enter your age" type="number" name="age" id="age" required min="16">
+                    <input class="inp" placeholder="Enter your age" type="number" name="age" id="age" required>
                 </p> <br><br>
                 <button class="btn" type="submit">Buy Ticket</button>
+                <?php
+                    // check if a previously set error is present - if so push it to the page
+                    if (isset($_GET["error"])) {
+                        echo "<h2 class='center' style='color: red;'>" . htmlspecialchars(string: $_GET["error"]) . "</h2>";
+                    }
+                ?>
             </form>
         </div>
         <div class="div" style="width: 40%">
@@ -290,11 +296,5 @@
             </div>
         </div>
     </div>
-    <?php
-    // check if a previously set error is present - if so push it to the page
-        if (isset($_GET["error"])) {
-            echo "<h2 class='center' style='color: red;'>" . htmlspecialchars(string: $_GET["error"]) . "</h2>";
-        }
-    ?>
 </body>
 </html>
