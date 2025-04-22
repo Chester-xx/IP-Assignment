@@ -151,12 +151,13 @@
                 <!-- Name on Ticket -->
                 <p>
                     <p style="font-size: x-large; margin-bottom: 5px; font-weight: 400;">&nbsp;Name<br></p>
-                    <input class="inp" type="text" name="username" id="username" placeholder="Enter your full name">
+                    <input class="inp" type="text" name="username" id="username" placeholder="Enter your full name" required>
                 </p>
                 <!-- Ticket types -->
                 <p>
                 <p style="font-size: x-large; margin-bottom: 5px; font-weight: 400;">&nbsp;Ticket Type<br></p>
-                    <select class="sel" name="type" id="type">
+                    <select class="sel" name="type" id="type" required>
+                        <option value="" disabled selected>Select a Ticket Type</option>
                         <option value="General Access">General Access - R500</option>
                         <option value="VIP">VIP - R2,000</option>
                         <option value="VVIP">VVIP - R3,000</option>
@@ -165,7 +166,7 @@
                 <!-- Gender -->
                 <p>
                 <p style="font-size: x-large; margin-bottom: 5px; font-weight: 400;">&nbsp;Gender<br></p>
-                    <select class="sel" name="gender" id="gender" required>
+                    <select class="sel" name="gender" id="gender" required> 
                         <option value="" disabled selected>Select your gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>

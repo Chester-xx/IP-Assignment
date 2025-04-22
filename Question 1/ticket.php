@@ -69,7 +69,7 @@
         $file = json_decode(json: file_get_contents(filename: "server.json"), associative: true);
         // Are there enough tickets available to be sold
         if ($file["tickets"]["left"] < 1) {
-            header(header: "Location: index.php?error=Not+enough+tickets+left+for+sale");
+            header(header: "Location: index.php?error=No+tickets+left+for+sale");
             exit;
         }
         // Is the user of age | filter_int returns false if not a valid integer
