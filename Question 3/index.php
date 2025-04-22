@@ -28,7 +28,7 @@
         // are named inputs set and not null
         if (!isset($_POST["names"]) || !isset($_POST["marks"])) {
             // redirect error
-            header(header: "Location: index.php?error=Please+ensure+you+have+entered+all+student+names+and+marks");
+            header(header: "Location: index.php?marks=true&error=Please+ensure+you+have+entered+all+student+names+and+marks");
             exit;
         }
         // set arrays in session
@@ -39,18 +39,18 @@
         for ($i = 0; $i < count(value: $_SESSION["names"]); $i++) {
             // are there any empty names
             if ($_SESSION["names"][$i] == "") {
-                header(header: "Location: index.php?error=Please+ensure+you+have+entered+all+student+names");
+                header(header: "Location: index.php?marks=true&error=Please+ensure+you+have+entered+all+student+names");
                 exit;
             }
             for ($j = 0; $j <= 4; $j++) {
                 // are any marks invalid, less than 0 or greater than 100
                 if ($_SESSION["marks"][$i][$j] < 0 || $_SESSION["marks"][$i][$j] > 100) {
-                    header(header: "Location: index.php?error=Please+ensure+you+have+entered+valid+student+marks+between+0+and+100");
+                    header(header: "Location: index.php?marks=true&error=Please+ensure+you+have+entered+valid+student+marks+between+0+and+100");
                     exit;
                 }
                 // are there any empty marks
                 if ($_SESSION["marks"][$i][$j] == "") {
-                    header(header: "Location: index.php?error=Please+ensure+you+have+entered+all+required+marks");
+                    header(header: "Location: index.php?marks=true&error=Please+ensure+you+have+entered+all+required+marks");
                     exit;
                 }
             }

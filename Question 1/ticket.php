@@ -177,8 +177,10 @@
 <script>
     // resubmit/POST check so that it doesnt overwrite server side data, like tickets left
     // although this fixes the post issue, if the user refreshes the page, they loose access to their ticket data
+    // - ChatGPT
     if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.href);
     }
+    // - ChatGPT
 </script>
 </html>
