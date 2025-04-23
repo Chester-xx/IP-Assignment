@@ -43,6 +43,11 @@
                 exit;
             }
             for ($j = 0; $j <= 4; $j++) {
+                // are they numeric
+                if (!is_numeric(value: $_SESSION["marks"][$i][$j])) {
+                    header(header: "Location: index.php?marks=true&error=Please+ensure+you+have+entered+all+required+marks");
+                    exit;
+                }
                 // are any marks invalid, less than 0 or greater than 100
                 if ($_SESSION["marks"][$i][$j] < 0 || $_SESSION["marks"][$i][$j] > 100) {
                     header(header: "Location: index.php?marks=true&error=Please+ensure+you+have+entered+valid+student+marks+between+0+and+100");
@@ -149,7 +154,7 @@
                         <h1>Students</h1>
                         <hr>
                         <h2>Number of Students</h2><br><br>
-                        <input type="text" name="studentcount" placeholder="Enter number of students" min="1" required>
+                        <input type="number" name="studentcount" placeholder="Enter number of students" min="1" required>
                         <button type="submit" name="continue">Continue</button>
                     </form>
                 </div>

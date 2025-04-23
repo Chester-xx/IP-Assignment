@@ -208,7 +208,7 @@
         }
         // Check for invalid payment methods
         if ($paymentmethod != "creditcard" && $paymentmethod != "paypal" && $paymentmethod != "cryptocurrency") {
-            header(header: "Location: index.php?errorpay=Error+:+Invalid+payment+method" . $paymentmethod);
+            header(header: "Location: index.php?errorpay=Error+:+Invalid+payment+method");
             exit;
         }
         // Get user balance from database
